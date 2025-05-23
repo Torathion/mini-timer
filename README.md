@@ -1,22 +1,22 @@
-# micro-timer
+# mini-timer
 
 <p align="center">
 <h1 align="center">The tiniest timer to tick!</h1>
 <p align="center">
-  <a href="https://www.npmjs.com/package/micro-timer"><img src="https://img.shields.io/npm/v/micro-timer?style=for-the-badge&logo=npm"/></a>
-  <a href="https://npmtrends.com/micro-timer"><img src="https://img.shields.io/npm/dm/micro-timer?style=for-the-badge"/></a>
-  <a href="https://bundlephobia.com/package/micro-timer"><img src="https://img.shields.io/bundlephobia/minzip/micro-timer?style=for-the-badge"/></a>
-  <a href="https://github.com/Torathion/micro-timer/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Torathion/micro-timer?style=for-the-badge"/></a>
-  <a href="https://codecov.io/gh/torathion/micro-timer"><img src="https://codecov.io/gh/torathion/micro-timer/branch/main/graph/badge.svg?style=for-the-badge" /></a>
-  <a href="https://github.com/torathion/micro-timer/actions"><img src="https://img.shields.io/github/actions/workflow/status/torathion/micro-timer/build.yml?style=for-the-badge&logo=esbuild"/></a>
+  <a href="https://www.npmjs.com/package/mini-timer"><img src="https://img.shields.io/npm/v/mini-timer?style=for-the-badge&logo=npm"/></a>
+  <a href="https://npmtrends.com/mini-timer"><img src="https://img.shields.io/npm/dm/mini-timer?style=for-the-badge"/></a>
+  <a href="https://bundlephobia.com/package/mini-timer"><img src="https://img.shields.io/bundlephobia/minzip/mini-timer?style=for-the-badge"/></a>
+  <a href="https://github.com/Torathion/mini-timer/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Torathion/mini-timer?style=for-the-badge"/></a>
+  <a href="https://codecov.io/gh/torathion/mini-timer"><img src="https://codecov.io/gh/torathion/mini-timer/branch/main/graph/badge.svg?style=for-the-badge" /></a>
+  <a href="https://github.com/torathion/mini-timer/actions"><img src="https://img.shields.io/github/actions/workflow/status/torathion/mini-timer/build.yml?style=for-the-badge&logo=esbuild"/></a>
 <a href="https://github.com/prettier/prettier#readme"><img alt="code style" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=for-the-badge&logo=prettier"></a>
 </p>
 </p>
 
-`micro-timer` is the smallest, minimal-dependency event driven timer that quickly and comfortably counts time for you.
+`mini-timer` is the smallest, minimal-dependency event driven timer that quickly and comfortably counts time for you.
 
 ```powershell
-    pnpm i micro-timer
+    pnpm i mini-timer
 ```
 
 ## Usage
@@ -26,7 +26,7 @@ The increment define also how long each time iteration is to count. The sign of 
 counter up (+) or down (-).
 
 ```typescript
-import timer, { type Timer } from 'micro-timer'
+import timer, { type Timer } from 'mini-timer'
 
 // From 0, count every 100ms until 10,000ms
 const t = timer(0, 100, 10000)
@@ -37,7 +37,7 @@ const t = timer(0, 100, 10000)
 The timer has multiple lifecycle events that can be listened on:
 
 ```typescript
-import timer, { type Timer, formatTime } from 'micro-timer'
+import timer, { type Timer, formatTime } from 'mini-timer'
 
 const t = timer(10_000, -150, 0)
 

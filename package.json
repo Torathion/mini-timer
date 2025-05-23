@@ -1,5 +1,5 @@
 {
-  "name": "micro-timer",
+  "name": "mini-timer",
   "version": "1.0.0",
   "description": "The tiniest timer to tick!",
   "types": "./index.d.ts",

@@ -1,6 +1,6 @@
-# Contributing to micro-timer
+# Contributing to mini-timer
 
-Thank you for your interest in contributing to micro-timer! We welcome contributions from everyone, whether you're fixing bugs, improving documentation, or adding new features. This guide will help you get started.
+Thank you for your interest in contributing to mini-timer! We welcome contributions from everyone, whether you're fixing bugs, improving documentation, or adding new features. This guide will help you get started.
 
 ---
 
@@ -23,8 +23,8 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 1. **Fork the Repository**: Click the "Fork" button on the top right of the repository page to create your own copy.
 2. **Clone the Repository**: Clone your forked repository to your local machine:
    ```bash
-   git clone https://github.com/your-username/micro-timer.git
-   cd micro-timer
+   git clone https://github.com/your-username/mini-timer.git
+   cd mini-timer
    ```
 
 ## Setting up the Project

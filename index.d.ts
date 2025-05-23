@@ -1,6 +1,6 @@
 import { type Handler } from 'mitt'
 
-declare module 'micro-timer' {
+declare module 'mini-timer' {
   /**
    * Union type for events that signal the timer has stopped.
    * - 'reset': The timer was stopped and reset to 0.
