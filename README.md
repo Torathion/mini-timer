@@ -58,6 +58,8 @@ t.stop() // The default event of stop is "finish".
 // Now, clean everything up with "off"
 
 t.off('update', ...)
+```
+
 ---
 
 © Torathion 2025

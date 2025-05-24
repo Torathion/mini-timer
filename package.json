@@ -26,13 +26,13 @@
     "utility"
   ],
   "author": "Torathion",
-  "homepage": "https://github.com/Torathion/node-streamweaver",
+  "homepage": "https://github.com/Torathion/mini-timer",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Torathion/node-streamweaver.git"
+    "url": "git+https://github.com/Torathion/mini-timer.git"
   },
   "bugs": {
-    "url": "https://github.com/Torathion/node-streamweaver/issues"
+    "url": "https://github.com/Torathion/mini-timer/issues"
   },
   "license": "MIT",
   "type": "module",
