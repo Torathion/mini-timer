@@ -47,6 +47,7 @@ jobs:
             - name: Build
               run: pnpm run build
             - name: Build Stackblitz
+              if: github.event_name == 'pull_request'
               run:  pnpm dlx pkg-pr-new@0.0 publish --compact --pnpm .
             - name: Build size report
               if: github.event_name == 'pull_request'
