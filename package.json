@@ -42,7 +42,7 @@
     "@rollup/rollup-win32-ia32-msvc": "^4.41.1",
     "@size-limit/file": "^11.2.0",
     "@size-limit/preset-app": "^11.2.0",
-    "@vitest/coverage-v8": "^3.1.4",
+    "@vitest/coverage-v8": "^4.0.3",
     "esbuild": "^0.25.4",
     "eslint": "^9.27.0",
     "eslint-config-shiny": "^4.2.1",
