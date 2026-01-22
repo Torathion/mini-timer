@@ -51,8 +51,5 @@
     "typestar": "^2.1.0",
     "vite": "^7.3.1",
     "vitest": "^4.0.18"
-  },
-  "dependencies": {
-    "mitt": "^3.0.1"
   }
 }

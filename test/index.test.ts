@@ -139,6 +139,17 @@ describe('timer', () => {
     expect(timer.running).toBe(false)
   })
 
+  it('blocks duplicate start calls', () => {
+    const timer = time(100, -10)
+    let counter = 0
+    timer.on('start', () => {
+      counter++
+    })
+
+    for (let i = 0; i < 100; i++) timer.start()
+    expect(counter).toBe(1)
+  })
+
   it('elapsed property', async () => {
     const timer = time(500, -100, 0)
     expect(timer.elapsed).toBe(500)
@@ -194,57 +205,75 @@ describe('timer', () => {
     })
   })
 
-  it('allows listening to specific events', async () => {
-    const timer = time(300, -100, 0)
-    const updateSpy = vi.fn()
-    const startSpy = vi.fn()
-    const finishSpy = vi.fn()
-    const resetSpy = vi.fn()
-    const pauseSpy = vi.fn()
+  describe('events', () => {
 
-    timer.on('update', updateSpy)
-    timer.on('start', startSpy)
-    timer.on('finish', finishSpy)
-    timer.on('reset', resetSpy)
-    timer.on('pause', pauseSpy)
+    it('allows listening to specific events', async () => {
+      const timer = time(300, -100, 0)
+      const updateSpy = vi.fn()
+      const startSpy = vi.fn()
+      const finishSpy = vi.fn()
+      const resetSpy = vi.fn()
+      const pauseSpy = vi.fn()
 
-    timer.start()
-    expect(startSpy).toHaveBeenCalledWith(300)
+      timer.on('update', updateSpy)
+      timer.on('start', startSpy)
+      timer.on('finish', finishSpy)
+      timer.on('reset', resetSpy)
+      timer.on('pause', pauseSpy)
 
-    vi.advanceTimersByTime(100)
-    expect(updateSpy).toHaveBeenCalledWith(200)
+      timer.start()
+      expect(startSpy).toHaveBeenCalledWith(300)
 
-    timer.pause()
-    expect(pauseSpy).toHaveBeenCalledWith(200)
+      vi.advanceTimersByTime(100)
+      expect(updateSpy).toHaveBeenCalledWith(200)
 
-    const promise = new Promise<void>(resolve => {
-      timer.on('finish', () => {
-        expect(finishSpy).toHaveBeenCalledWith(0)
-        timer.reset()
-        expect(resetSpy).toHaveBeenCalledWith(0)
-        resolve()
+      timer.pause()
+      expect(pauseSpy).toHaveBeenCalledWith(200)
+
+      const promise = new Promise<void>(resolve => {
+        timer.on('finish', () => {
+          expect(finishSpy).toHaveBeenCalledWith(0)
+          timer.reset()
+          expect(resetSpy).toHaveBeenCalledWith(0)
+          resolve()
+        })
       })
+
+      timer.start() // Resume
+      vi.advanceTimersByTime(200) // Finish it
+
+      await promise
     })
 
-    timer.start() // Resume
-    vi.advanceTimersByTime(200) // Finish it
+    it('allows removing event listeners', async () => {
+      const timer = time(100, -10, 0)
+      const updateSpy = vi.fn()
 
-    await promise
-  })
+      timer.on('update', updateSpy)
+      timer.start()
+      vi.advanceTimersByTime(10)
+      expect(updateSpy).toHaveBeenCalledTimes(1)
 
-  it('allows removing event listeners', async () => {
-    const timer = time(100, -10, 0)
-    const updateSpy = vi.fn()
+      timer.off('update', updateSpy)
+      vi.advanceTimersByTime(10)
+      expect(updateSpy).toHaveBeenCalledTimes(1) // Should not have been called again
 
-    timer.on('update', updateSpy)
-    timer.start()
-    vi.advanceTimersByTime(10)
-    expect(updateSpy).toHaveBeenCalledTimes(1)
+      timer.stop()
+    })
 
-    timer.off('update', updateSpy)
-    vi.advanceTimersByTime(10)
-    expect(updateSpy).toHaveBeenCalledTimes(1) // Should not have been called again
+    it('can clear all events', () => {
+      const timer = time(100, 100, 0)
+      for (let i = 0; i < 10; i++) timer.on('update', () => {})
 
-    timer.stop()
+      expect(timer.events.get('update')!.size).toBe(10)
+      timer.off('update')
+      expect(timer.events.get('update')!.size).toBe(0)
+    })
+
+    it('ignores off calls of an not set event type', () => {
+      const timer = time(100, 10, 0)
+      timer.on('update', () => {})
+      timer.off('finish')
+    })
   })
 })

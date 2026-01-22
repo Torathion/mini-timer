@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      mitt:
-        specifier: ^3.0.1
-        version: 3.0.1
     devDependencies:
       '@size-limit/file':
         specifier: ^12.0.0
