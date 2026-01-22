@@ -1,6 +1,3 @@
-import type { Interval } from 'typestar'
-import mitt, { type Handler } from 'mitt'
-
 const MSToHours = 1000 * 60 * 60
 const MSToMin = 1000 * 60
 
@@ -8,10 +5,12 @@ const pad = (num: number, size: number): string => `${num}`.padStart(size, '0')
 
 export type StartEvent = 'start' | 'resume'
 export type StopEvent = 'reset' | 'finish' | 'pause'
+export type TimerListener = (elapsed: number) => void
 
 export interface Timer extends TimerState {
-  off: (event: TimerEvent, handler: Handler<number>) => void
-  on: (event: TimerEvent, handler: Handler<number>) => void
+  events: Map<TimerEvent, Set<TimerListener>>
+  off: (event: TimerEvent, handler?: TimerListener) => void
+  on: (event: TimerEvent, handler: TimerListener) => void
   pause: () => void
   reset: () => void
   resume: () => void
@@ -56,9 +55,15 @@ export function formatTime(totalTime: number): string {
  */
 export default function timer(from: number, inc: number, to?: number): Timer {
   const state: TimerState = { elapsed: from, running: false }
-  const emitter = mitt<Record<TimerEvent, number>>()
+  const emitter = new Map<TimerEvent, Set<TimerListener>>()
   const sign = Math.sign(inc)
-  let id: Interval | undefined
+  let id: number | undefined
+
+  const emit = (type: TimerEvent, elapsed: number): void => {
+    if (emitter.has(type)) {
+      for (const fn of emitter.get(type)!) fn(elapsed)
+    }
+  }
 
   /**
    *  Manually triggers a single update cycle. This advances `elapsed` by `inc`
@@ -70,9 +75,9 @@ export default function timer(from: number, inc: number, to?: number): Timer {
       let elapsed = state.elapsed + inc
       if (elapsed < 0) elapsed = 0
       if (to !== undefined && elapsed * sign >= to * sign) {
-        state.elapsed = elapsed = to
+        state.elapsed = to
         stop()
-      } else emitter.emit('update', (state.elapsed = elapsed))
+      } else emit('update', (state.elapsed = elapsed))
     }
   }
 
@@ -85,7 +90,7 @@ export default function timer(from: number, inc: number, to?: number): Timer {
     if (to && from * sign > to * sign) throw new Error(`Invalid timer range [${from}, ${to}] on inc ${inc}.`)
     if (!state.running) {
       state.running = true
-      emitter.emit(event, state.elapsed)
+      emit(event, state.elapsed)
       id = setInterval(update, Math.abs(inc))
     }
   }
@@ -105,7 +110,7 @@ export default function timer(from: number, inc: number, to?: number): Timer {
   const stop = (event: StopEvent = 'finish'): void => {
     if (state.running || event === 'reset') {
       state.running = false
-      emitter.emit(event, state.elapsed)
+      emit(event, state.elapsed)
       if (id) {
         clearInterval(id)
         id = undefined
@@ -145,8 +150,9 @@ export default function timer(from: number, inc: number, to?: number): Timer {
    *  @param event - The timer event to listen for.
    *  @param handler - The handler function to call when the event occurs.
    */
-  const on = (event: TimerEvent, handler: Handler<number>): void => {
-    emitter.on(event, handler)
+  const on = (event: TimerEvent, handler: TimerListener): void => {
+    if (!emitter.has(event)) emitter.set(event, new Set())
+    emitter.get(event)!.add(handler)
   }
 
   /**
@@ -155,9 +161,13 @@ export default function timer(from: number, inc: number, to?: number): Timer {
    *  @param event - The timer event to stop listening for.
    *  @param handler - The handler function to remove.
    */
-  const off = (event: TimerEvent, handler: Handler<number>): void => {
-    emitter.off(event, handler)
+  const off = (event: TimerEvent, handler?: TimerListener): void => {
+    if (emitter.has(event)) {
+      const set = emitter.get(event)!
+      if (handler) set.delete(handler)
+      else set.clear()
+    }
   }
 
-  return Object.assign(state, { off, on, pause, reset, resume, start, stop, toggle, update })
+  return Object.assign(state, { events: emitter, off, on, pause, reset, resume, start, stop, toggle, update })
 }

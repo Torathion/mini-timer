@@ -1,5 +1,3 @@
-import { type Handler } from 'mitt'
-
 declare module 'mini-timer' {
   /**
    * Union type for events that signal the timer has stopped.
@@ -23,6 +21,11 @@ declare module 'mini-timer' {
   export type TimerEvent = StopEvent | 'update' | StartEvent
 
   /**
+   *  Generic Timer Event Listener for all event types.
+   */
+  export type TimerListener = (elapsed: number) => void
+
+  /**
    * Defines the core state properties of a timer.
    */
   export interface TimerState {
@@ -41,19 +44,23 @@ declare module 'mini-timer' {
    */
   export interface Timer extends TimerState {
     /**
+     *  Event cache storing all functions.
+     */
+    events: Map<TimerEvent, Set<TimerListener>>
+    /**
      *  Removes an event handler for a specific timer event.
      *
      *  @param event - The timer event to stop listening for.
      *  @param handler - The handler function to remove.
      */
-    off: (event: TimerEvent, handler: Handler<number>) => void
+    off: (event: TimerEvent, handler: TimerListener) => void
     /**
      * Registers an event handler for a specific timer event.
      *
      *  @param event - The timer event to listen for.
      *  @param handler - The handler function to call when the event occurs.
      */
-    on: (event: TimerEvent, handler: Handler<number>) => void
+    on: (event: TimerEvent, handler: TimerListener) => void
     /**
      *  Pauses the timer. This stops the timer and emits a 'pause' event.
      */
