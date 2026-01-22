@@ -13,11 +13,15 @@
 </p>
 </p>
 
-`mini-timer` is the smallest, minimal-dependency event driven timer that quickly and comfortably counts time for you.
+`mini-timer` is the smallest event driven timer without any dependencies that quickly and comfortably counts time for you.
 
 ```powershell
     pnpm i mini-timer
 ```
+
+## Goal
+
+The goal of this package is to provide the smallest possible timer package that is easy to use and as versatile as possible.
 
 ## Usage
 
@@ -56,10 +60,10 @@ t.resume()
 t.stop() // The default event of stop is "finish".
 
 // Now, clean everything up with "off"
-
-t.off('update', ...)
+t.off('update', ...) // Removes callback by reference
+t.off('update') // Removes all callbacks
 ```
 
 ---
 
-© Torathion 2025
+© Torathion 2026

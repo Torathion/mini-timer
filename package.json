@@ -1,6 +1,6 @@
 {
   "name": "mini-timer",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "The tiniest timer to tick!",
   "types": "./index.d.ts",
   "main": "./dist/index.js",
@@ -21,7 +21,7 @@
   "keywords": [
     "small",
     "timer",
-    "micro",
+    "mini",
     "tiny",
     "utility"
   ],
