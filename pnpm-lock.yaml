@@ -35,9 +35,6 @@ importers:
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
-      typestar:
-        specifier: ^2.1.0
-        version: 2.1.0
       vite:
         specifier: ^7.3.1
         version: 7.3.1(@types/node@22.15.21)(jiti@2.6.1)(stylus@0.57.0)

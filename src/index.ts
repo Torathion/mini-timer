@@ -1,5 +1,3 @@
-import type { Interval } from 'typestar'
-
 const MSToHours = 1000 * 60 * 60
 const MSToMin = 1000 * 60
 
@@ -59,7 +57,7 @@ export default function timer(from: number, inc: number, to?: number): Timer {
   const state: TimerState = { elapsed: from, running: false }
   const emitter = new Map<TimerEvent, Set<TimerListener>>()
   const sign = Math.sign(inc)
-  let id: Interval | undefined
+  let id: number | undefined
 
   const emit = (type: TimerEvent, elapsed: number): void => {
     if (emitter.has(type)) {
