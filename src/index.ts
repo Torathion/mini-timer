@@ -1,7 +1,6 @@
-const MSToHours = 1000 * 60 * 60
-const MSToMin = 1000 * 60
 
-const pad = (num: number, size: number): string => `${num}`.padStart(size, '0')
+
+const pad = (num: number): string => `0${num}`.slice(-2)
 
 export type StartEvent = 'start' | 'resume'
 export type StopEvent = 'reset' | 'finish' | 'pause'
@@ -34,13 +33,9 @@ export interface TimerState {
  *  @returns A formatted time string (e.g., "01:23:45" or "23:45").
  */
 export function formatTime(totalTime: number): string {
-  const hours = (totalTime / MSToHours) | 0
-  totalTime %= MSToHours
-  const minutes = (totalTime / MSToMin) | 0
-
-  let str = ''
-  if (hours > 0) str = `${pad(hours, 2)}:`
-  return `${str}${pad(minutes, 2)}:${pad(((totalTime % MSToMin) * 0.001) | 0, 2)}`
+  const hours = (totalTime / 36e5) | 0
+  totalTime %= 36e5
+  return `${hours > 0 ? `${pad(hours)}:` : ''}${pad((totalTime / 6e4) | 0)}:${pad(((totalTime % 6e4) / 1e3) | 0)}`
 }
 
 /**
@@ -56,13 +51,12 @@ export function formatTime(totalTime: number): string {
 export default function timer(from: number, inc: number, to?: number): Timer {
   const state: TimerState = { elapsed: from, running: false }
   const emitter = new Map<TimerEvent, Set<TimerListener>>()
-  const sign = Math.sign(inc)
+  //@ts-expect-error
+  const sign = (inc > 0) - (inc < 0)
   let id: number | undefined
 
   const emit = (type: TimerEvent, elapsed: number): void => {
-    if (emitter.has(type)) {
-      for (const fn of emitter.get(type)!) fn(elapsed)
-    }
+    for (const fn of emitter.get(type) ?? []) fn(elapsed)
   }
 
   /**
@@ -91,7 +85,7 @@ export default function timer(from: number, inc: number, to?: number): Timer {
     if (!state.running) {
       state.running = true
       emit(event, state.elapsed)
-      id = setInterval(update, Math.abs(inc))
+      id = setInterval(update, inc < 0 ? -inc : inc)
     }
   }
 
@@ -139,9 +133,7 @@ export default function timer(from: number, inc: number, to?: number): Timer {
    *  otherwise, it calls `start()` (emitting 'start' by default).
    */
   const toggle = (): void => {
-    /* eslint-disable  ts/no-unused-expressions */
     state.running ? stop() : start()
-    /* eslint-enable */
   }
 
   /**
@@ -162,11 +154,7 @@ export default function timer(from: number, inc: number, to?: number): Timer {
    *  @param handler - The handler function to remove.
    */
   const off = (event: TimerEvent, handler?: TimerListener): void => {
-    if (emitter.has(event)) {
-      const set = emitter.get(event)!
-      if (handler) set.delete(handler)
-      else set.clear()
-    }
+    emitter.get(event)?.[handler ? 'delete' : 'clear']?.(handler as any)
   }
 
   return Object.assign(state, { events: emitter, off, on, pause, reset, resume, start, stop, toggle, update })
