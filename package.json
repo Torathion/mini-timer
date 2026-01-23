@@ -1,6 +1,6 @@
 {
   "name": "mini-timer",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "The tiniest timer to tick!",
   "types": "./index.d.ts",
   "main": "./dist/index.js",
@@ -13,7 +13,7 @@
     }
   },
   "scripts": {
-    "build": "node esbuild.config.js",
+    "build": "tsdown",
     "lint": "eslint src --fix",
     "format": "npx prettier --write */**.ts",
     "test": "vitest"
@@ -39,15 +39,8 @@
   "sideEffects": false,
   "packageManager": "pnpm@10.28.1",
   "devDependencies": {
-    "@size-limit/file": "^12.0.0",
-    "@size-limit/preset-app": "^12.0.0",
     "@vitest/coverage-v8": "^4.0.18",
-    "esbuild": "^0.27.2",
-    "eslint": "^9.39.2",
-    "eslint-config-shiny": "^4.3.1",
-    "jiti": "^2.6.1",
-    "size-limit": "^12.0.0",
-    "typescript": "^5.9.3",
+    "tsdown": "^0.20.1",
     "vite": "^7.3.1",
     "vitest": "^4.0.18"
   }

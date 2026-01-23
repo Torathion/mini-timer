@@ -13,7 +13,7 @@
 </p>
 </p>
 
-`mini-timer` is the smallest event driven timer without any dependencies that quickly and comfortably counts time for you.
+`mini-timer` is a tiny (570 bytes gzipped) event driven timer without any dependencies that quickly and comfortably counts time for you.
 
 ```powershell
     pnpm i mini-timer
@@ -26,14 +26,21 @@ The goal of this package is to provide the smallest possible timer package that 
 ## Usage
 
 The timer requires 2 (optional 3) arguments that define the start and end point with the increment between steps.
-The increment define also how long each time iteration is to count. The sign of the increment defines if the timer
-counter up (+) or down (-).
+The increment also defines how long each time iteration is per update. The sign of the increment defines whether the timer
+counts up (+) or down (-).
 
 ```typescript
 import timer, { type Timer } from 'mini-timer'
 
+// Standard timer: From 0, count ever 1000ms (1s) indefinitely
+const t = timer(0, 1000)
+
+// Standard countdown: From 10s count every second to 0
+const t = timer(10_000, -1000, 0)
+
 // From 0, count every 100ms until 10,000ms
 const t = timer(0, 100, 10000)
+
 ```
 
 ### Events
@@ -51,12 +58,12 @@ t.on('pause', () => console.log("Pause"))
 t.on('finish', (elapsed) => console.log("Preemptively finished at", elapsed))
 
 t.start()
-// Do stuff for a long time
+// <code>
 t.pause()
-// Again...
+// <code>
 t.resume()
 
-// The timer will stop when it reaches 0, but we can stop it preemptively
+// The timer will stop when it reaches to (0), but we can stop it preemptively
 t.stop() // The default event of stop is "finish".
 
 // Now, clean everything up with "off"

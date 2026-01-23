@@ -206,7 +206,6 @@ describe('timer', () => {
   })
 
   describe('events', () => {
-
     it('allows listening to specific events', async () => {
       const timer = time(300, -100, 0)
       const updateSpy = vi.fn()

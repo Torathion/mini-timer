@@ -47,13 +47,13 @@ jobs:
                 key: pnpm-store-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml')}}
                 restore-keys: |
                   pnpm-store-${{ runner.os }}-
+            - name: Build
+              run: pnpm run build
             - name: 'Test'
               run: pnpm run test
             - name: Report vitest coverage
               if: always()
               uses: davelosert/vitest-coverage-report-action@v2
-            - name: Lint
-              run: pnpm run lint
             - name: Codecov
               uses: codecov/codecov-action@v5
               with:

@@ -27,7 +27,6 @@
     "moduleResolution": "Bundler",
     "useDefineForClassFields": true,
     "noImplicitThis": true,
-    "baseUrl": ".",
     "typeRoots": ["node_modules/@types/", "./types/"],
     "lib": ["ES2023", "DOM", "DOM.Iterable"]
   },
