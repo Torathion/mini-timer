@@ -49,11 +49,12 @@ declare module 'mini-timer' {
     events: Map<TimerEvent, Set<TimerListener>>
     /**
      *  Removes an event handler for a specific timer event.
+     *  Removes all event handlers if no handler is specified.
      *
      *  @param event - The timer event to stop listening for.
-     *  @param handler - The handler function to remove.
+     *  @param handler - (optional) The handler function to remove.
      */
-    off: (event: TimerEvent, handler: TimerListener) => void
+    off: (event: TimerEvent, handler?: TimerListener) => void
     /**
      * Registers an event handler for a specific timer event.
      *

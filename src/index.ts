@@ -149,9 +149,10 @@ export default function timer(from: number, inc: number, to?: number): Timer {
 
   /**
    *  Removes an event handler for a specific timer event.
+   *  Removes all event handlers if no handler is specified.
    *
    *  @param event - The timer event to stop listening for.
-   *  @param handler - The handler function to remove.
+   *  @param handler - (optional) The handler function to remove.
    */
   const off = (event: TimerEvent, handler?: TimerListener): void => {
     emitter.get(event)?.[handler ? 'delete' : 'clear']?.(handler as any)
