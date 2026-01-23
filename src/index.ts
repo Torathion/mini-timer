@@ -1,11 +1,7 @@
-
-
 const pad = (num: number): string => `0${num}`.slice(-2)
 
 export type StartEvent = 'start' | 'resume'
 export type StopEvent = 'reset' | 'finish' | 'pause'
-export type TimerListener = (elapsed: number) => void
-
 export interface Timer extends TimerState {
   events: Map<TimerEvent, Set<TimerListener>>
   off: (event: TimerEvent, handler?: TimerListener) => void
@@ -18,7 +14,9 @@ export interface Timer extends TimerState {
   toggle: () => void
   update: () => void
 }
+
 export type TimerEvent = StopEvent | 'update' | StartEvent
+export type TimerListener = (elapsed: number) => void
 
 export interface TimerState {
   elapsed: number
@@ -51,7 +49,7 @@ export function formatTime(totalTime: number): string {
 export default function timer(from: number, inc: number, to?: number): Timer {
   const state: TimerState = { elapsed: from, running: false }
   const emitter = new Map<TimerEvent, Set<TimerListener>>()
-  //@ts-expect-error
+  // @ts-expect-error
   const sign = (inc > 0) - (inc < 0)
   let id: number | undefined
 
