@@ -1,5 +1,5 @@
 *
-!dist/*.js
+!dist/*.cjs
 !dist/*.mjs
 !package.json
 !README.md
